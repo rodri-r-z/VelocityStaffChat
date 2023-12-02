@@ -11,3 +11,6 @@ on_disable: "&bStaff Chat is disabled. &7Remember you can also use &b/sc [messag
 
 # Format for staff chat
 chat_format: "&b[StaffChat] &7%player%: %message%"
+
+no_permission: "&cYou do not have permission to use this command."
+cannot_exec_from_console: "You may not execute this command from the console."
