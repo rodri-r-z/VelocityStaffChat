@@ -1,0 +1,13 @@
+# Velocity Staff History
+# v.1.0. - By Rodrigo R.
+
+# Sent to staff that runs /sc
+on_enable: "&bStaff Chat is enabled. &7Remember you can also use &b/sc [message]&7."
+# Sent to staff that runs /sc
+on_disable: "&bStaff Chat is disabled. &7Remember you can also use &b/sc [message]&7."
+
+# /sc can also be executed with: /staffchat
+# Permission to use: staffchat.use
+
+# Format for staff chat
+chat_format: "&b[StaffChat] &7%player%: %message%"
