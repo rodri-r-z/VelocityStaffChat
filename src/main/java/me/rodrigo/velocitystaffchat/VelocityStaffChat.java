@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Plugin(
         id = "velocitystaffchat",
@@ -75,8 +76,8 @@ public class VelocityStaffChat {
 
     public void BroadcastMessage(String message) {
         proxy.getScheduler().buildTask(this, () -> {
-            for (Player player : players) {
-                player.sendMessage(Component.text(MinecraftColorCode.ReplaceAllAmpersands(config.AsString("chat_format")).replace("%player%", player.getUsername()).replace("%message%", message)));
+            for (Player player : proxy.getAllPlayers().stream().filter(a -> a.hasPermission("staffchat.use")).collect(Collectors.toList())) {
+                player.sendMessage(Component.text(MinecraftColorCode.ReplaceAllAmpersands(config.AsString("chat_format").replace("%player%", player.getUsername()).replace("%message%", message))));
             }
         }).schedule();
     }
