@@ -6,6 +6,7 @@ import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.plugin.Plugin;
+import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import me.rodrigo.velocitystaffchat.commands.StaffChat;
@@ -35,7 +36,7 @@ public class VelocityStaffChat {
     public final List<Player> players = new ArrayList<>();
 
     @Inject
-    public VelocityStaffChat(ProxyServer proxy, Logger logger, Path dataFolder) {
+    public VelocityStaffChat(ProxyServer proxy, Logger logger, @DataDirectory Path dataFolder) {
         this.dataFolder = dataFolder;
         this.proxy = proxy;
         this.logger = logger;
