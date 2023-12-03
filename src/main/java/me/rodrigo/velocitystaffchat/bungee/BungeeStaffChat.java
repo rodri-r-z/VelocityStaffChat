@@ -40,8 +40,10 @@ public class BungeeStaffChat extends Plugin implements Listener {
             return;
         }
         try {
-            FileDownloader.downloadFile("https://raw.githubusercontent.com/rodri-r-z/VelocityStaffChat/main/src/main/resources/config.yml",
-                    dataFolder.resolve("config.yml").toString());
+            if (!DataFolder.toPath().resolve("config.yml").toFile().exists()) {
+                FileDownloader.downloadFile("https://raw.githubusercontent.com/rodri-r-z/VelocityStaffChat/main/src/main/resources/config.yml",
+                        dataFolder.resolve("config.yml").toString());
+            }
             config = new Parser(dataFolder.resolve("config.yml"));
         } catch (IOException e) {
             logger.error("Could not download the config file due to "+e);
