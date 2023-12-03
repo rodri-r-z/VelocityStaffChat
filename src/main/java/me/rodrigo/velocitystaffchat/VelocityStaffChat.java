@@ -9,7 +9,7 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
-import me.rodrigo.velocitystaffchat.commands.StaffChat;
+import me.rodrigo.velocitystaffchat.commands.velocity.StaffChat;
 import me.rodrigo.velocitystaffchat.lib.MinecraftColorCode;
 import me.rodrigo.velocitystaffchat.lib.Parser;
 import me.rodrigo.velocitystaffchat.network.FileDownloader;

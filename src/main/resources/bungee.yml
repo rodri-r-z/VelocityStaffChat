@@ -1,0 +1,4 @@
+name: BungeeStaffChat
+version: '${project.version}'
+main: me.rodrigo.velocitystaffchat.bungee.BungeeStaffChat
+author: "Rodrigo R."
