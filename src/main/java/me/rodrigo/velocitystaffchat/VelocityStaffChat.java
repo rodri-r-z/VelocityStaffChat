@@ -12,12 +12,13 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import me.rodrigo.velocitystaffchat.commands.velocity.StaffChat;
 import me.rodrigo.velocitystaffchat.lib.MinecraftColorCode;
 import me.rodrigo.velocitystaffchat.lib.Parser;
-import me.rodrigo.velocitystaffchat.network.FileDownloader;
 import net.kyori.adventure.text.Component;
 import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 @Plugin(
         id = "velocitystaffchat",
         name = "VelocityStaffChat",
-        version = "1.0-SNAPSHOT",
+        version = "1.2",
         authors = {"Rodrigo R."}
 )
 public class VelocityStaffChat {
@@ -51,10 +52,12 @@ public class VelocityStaffChat {
             return;
         }
         try {
-            if (!DataFolder.toPath().resolve("config.yml").toFile().exists()) {
-                FileDownloader.downloadFile("https://raw.githubusercontent.com/rodri-r-z/VelocityStaffChat/main/src/main/resources/config.yml",
-                        dataFolder.resolve("config.yml").toString());
+            final InputStream stream = getClass().getClassLoader().getResourceAsStream("config.yml");
+            if (stream == null) {
+                logger.error("Could not download the config file!");
+                return;
             }
+            Files.copy(stream, dataFolder.resolve("config.yml"));
             config = new Parser(dataFolder.resolve("config.yml"));
         } catch (IOException e) {
             logger.error("Could not download the config file due to "+e);
