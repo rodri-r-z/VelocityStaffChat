@@ -1,4 +1,5 @@
-name: BungeeStaffChat
-version: '${project.version}'
-main: me.rodrigo.velocitystaffchat.bungee.BungeeStaffChat
+name: StaffChat
+main: dev.rodrigo.staffchat.bungee.StaffChatBungee
+description: "Staff Chat - By Rodrigo R."
 author: "Rodrigo R."
+version: "1.4"

@@ -1,16 +1,17 @@
-# Velocity Staff History
-# v.1.0. - By Rodrigo R.
+# Staff Chat - By Rodrigo R.
 
-# Sent to staff that runs /sc
-on_enable: "&bStaff Chat is enabled. &7Remember you can also use &b/sc [message]&7."
-# Sent to staff that runs /sc
-on_disable: "&bStaff Chat is disabled. &7Remember you can also use &b/sc [message]&7."
+on_enable: "&7Staff chat enabled. Remember you can also use &b/sc [message] &7to send messages."
+on_disable: "&7Staff chat disabled."
+on_message: "&b[StaffChat] &7{player}: {message}"
+no_permission: "&cYou don't have permission to use this command."
+error_console: "&cYou can't use this command in the console."
+config_reload: "&7Config reloaded."
 
-# /sc can also be executed with: /staffchat
-# Permission to use: staffchat.use
+# Permissions:
+# staffchat.use - Use staff chat (Enable, disable and recieve staff chat messages)
+# staffchat.reload - Reload the config
 
-# Format for staff chat
-chat_format: "&b[StaffChat] &7%player%: %message%"
+# Hidden uses:
+# /sc reload - Reload the config
 
-no_permission: "&cYou do not have permission to use this command."
-cannot_exec_from_console: "You may not execute this command from the console."
+# Use: /sc OR /staffchat

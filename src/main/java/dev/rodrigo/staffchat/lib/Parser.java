@@ -1,4 +1,4 @@
-package me.rodrigo.velocitystaffchat.lib;
+package dev.rodrigo.staffchat.lib;
 
 import org.yaml.snakeyaml.Yaml;
 
@@ -98,7 +98,7 @@ public class Parser {
             }
             return FinalData;
         } catch (Exception E) {
-            
+
             throw new RuntimeException(E);
         }
     }
@@ -139,7 +139,7 @@ public class Parser {
             }
             return FinalData;
         } catch (Exception E) {
-            
+
             throw new RuntimeException(E);
         }
     }
@@ -160,7 +160,7 @@ public class Parser {
             }
             return FinalData;
         } catch (Exception E) {
-            
+
             throw new RuntimeException(E);
         }
     }
@@ -181,7 +181,7 @@ public class Parser {
             }
             return FinalData;
         } catch (Exception E) {
-            
+
             throw new RuntimeException(E);
         }
     }
@@ -202,7 +202,7 @@ public class Parser {
             }
             return FinalData;
         } catch (Exception E) {
-            
+
             throw new RuntimeException(E);
         }
     }
