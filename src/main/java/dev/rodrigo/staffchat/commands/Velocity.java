@@ -47,6 +47,15 @@ public class Velocity implements SimpleCommand {
                 return;
             }
             final Player player = (Player) invocation.source();
+            if (!player.hasPermission("staffchat.use")) {
+                player.sendMessage(
+                        Component.text(
+                                plugin.config.AsString("no_permission")
+                                        .replaceAll("&", "§")
+                        )
+                );
+                return;
+            }
             if (args.length > 0) {
                 for (Player p : plugin.proxyServer.getAllPlayers().stream().filter(a -> a.hasPermission("staffchat.use")).collect(Collectors.toList())) {
                     p.sendMessage(

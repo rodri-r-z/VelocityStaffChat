@@ -48,6 +48,15 @@ public class Bungee extends Command {
                 return;
             }
             final ProxiedPlayer player = (ProxiedPlayer) commandSender;
+            if (!player.hasPermission("staffchat.use")) {
+                player.sendMessage(
+                        TextComponent.fromLegacyText(
+                                plugin.config.AsString("no_permission")
+                                        .replaceAll("&", "§")
+                        )
+                );
+                return;
+            }
             if (args.length > 0) {
                 for (ProxiedPlayer p : plugin.proxyServer.getPlayers().stream().filter(a -> a.hasPermission("staffchat.use")).collect(Collectors.toList())) {
                     p.sendMessage(

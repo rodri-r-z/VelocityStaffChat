@@ -21,7 +21,7 @@ import java.util.UUID;
 @Plugin(
     id = "staffchat",
     name = "StaffChat",
-    version = "1.4",
+    version = "1.5",
     description = "Staff Chat - By Rodrigo R.",
     authors = {"Rodrigo R."}
 )
