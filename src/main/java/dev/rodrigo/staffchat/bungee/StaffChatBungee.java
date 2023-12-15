@@ -3,6 +3,9 @@ package dev.rodrigo.staffchat.bungee;
 import dev.rodrigo.staffchat.commands.Bungee;
 import dev.rodrigo.staffchat.lib.Parser;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -15,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class StaffChatBungee extends Plugin implements Listener {
     public ProxyServer proxyServer;
@@ -57,6 +61,7 @@ public class StaffChatBungee extends Plugin implements Listener {
             }
             this.config = new Parser(dataDir.resolve("config.yml"));
             proxyServer.getPluginManager().registerCommand(this, new Bungee(this));
+            proxyServer.getPluginManager().registerListener(this, this);
             logger.info("Plugin loaded!");
         } catch (Exception e) {
             logger.severe("Found an error while loading the config file: "+e);
@@ -66,5 +71,27 @@ public class StaffChatBungee extends Plugin implements Listener {
     @EventHandler
     public void onPlayerDisconnect(PlayerDisconnectEvent event) {
         activePlayers.removeIf(uuid -> uuid.toString().equals(event.getPlayer().getUniqueId().toString()));
+    }
+
+    @EventHandler
+    public void onChat(ChatEvent e) {
+        if (config == null) return;
+        if (!(e.getSender() instanceof ProxiedPlayer)) return;
+        final ProxiedPlayer p = (ProxiedPlayer) e.getSender();
+        if (!activePlayers.contains(p.getUniqueId())) return;
+        if (e.getMessage().startsWith("/")) return;
+        e.setCancelled(true);
+        getProxy().getScheduler().runAsync(this, () -> {
+            for (ProxiedPlayer pt : proxyServer.getPlayers().stream().filter(a -> a.hasPermission("staffchat.use")).collect(Collectors.toList())) {
+                pt.sendMessage(
+                        TextComponent.fromLegacyText(
+                                config.AsString("on_message")
+                                        .replaceAll("(?i)\\{player}", p.getName())
+                                        .replaceAll("(?i)\\{message}", e.getMessage())
+                                        .replaceAll("&", "§")
+                        )
+                );
+            }
+        });
     }
 }

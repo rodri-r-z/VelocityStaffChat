@@ -2,13 +2,16 @@ package dev.rodrigo.staffchat;
 
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
+import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
+import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import dev.rodrigo.staffchat.commands.Velocity;
 import dev.rodrigo.staffchat.lib.Parser;
+import net.kyori.adventure.text.Component;
 import org.slf4j.Logger;
 
 import java.io.InputStream;
@@ -17,11 +20,12 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Plugin(
     id = "staffchat",
     name = "StaffChat",
-    version = "1.5",
+    version = "1.6",
     description = "Staff Chat - By Rodrigo R.",
     authors = {"Rodrigo R."}
 )
@@ -79,6 +83,26 @@ public class StaffChat {
         if (config == null) return;
         proxyServer.getCommandManager().register("sc", new Velocity(this));
         proxyServer.getCommandManager().register("staffchat", new Velocity(this));
+    }
+
+    @Subscribe
+    public void onPlayerChat(PlayerChatEvent e) {
+        if (config == null) return;
+        final Player p = e.getPlayer();
+        if (!activePlayers.contains(p.getUniqueId())) return;
+        e.setResult(PlayerChatEvent.ChatResult.denied());
+        proxyServer.getScheduler().buildTask(this, () -> {
+            for (Player pt : proxyServer.getAllPlayers().stream().filter(a -> a.hasPermission("staffchat.use")).collect(Collectors.toList())) {
+                pt.sendMessage(
+                        Component.text(
+                                config.AsString("on_message")
+                                        .replaceAll("(?i)\\{player}", p.getUsername())
+                                        .replaceAll("(?i)\\{message}", e.getMessage())
+                                        .replaceAll("&", "§")
+                        )
+                );
+            }
+        }).schedule();
     }
 
     @Subscribe
