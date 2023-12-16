@@ -1,6 +1,7 @@
 package dev.rodrigo.staffchat.commands;
 
 import com.velocitypowered.api.command.SimpleCommand;
+import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.proxy.Player;
 import dev.rodrigo.staffchat.StaffChat;
 import net.kyori.adventure.text.Component;
@@ -56,6 +57,12 @@ public class Velocity implements SimpleCommand {
                 );
                 return;
             }
+
+            if (player.getCurrentServer().isEmpty()) {
+                throw new RuntimeException("An invalid server was found for player: "+player.getUsername()+": The player is not connected to any server.");
+            }
+
+
             if (args.length > 0) {
                 for (Player p : plugin.proxyServer.getAllPlayers().stream().filter(a -> a.hasPermission("staffchat.use")).collect(Collectors.toList())) {
                     p.sendMessage(
@@ -63,6 +70,7 @@ public class Velocity implements SimpleCommand {
                                     plugin.config.AsString("on_message")
                                             .replaceAll("(?i)\\{player}", player.getUsername())
                                             .replaceAll("(?i)\\{message}", String.join(" ", args))
+                                            .replaceAll("(?i)\\{server}", plugin.formatString(player.getCurrentServer().get().getServerInfo().getName()))
                                             .replaceAll("&", "§")
                             )
                     );

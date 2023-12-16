@@ -64,6 +64,7 @@ public class Bungee extends Command {
                                     plugin.config.AsString("on_message")
                                             .replaceAll("(?i)\\{player}", player.getName())
                                             .replaceAll("(?i)\\{message}", String.join(" ", args))
+                                            .replaceAll("(?i)\\{server}", plugin.formatString(player.getServer().getInfo().getName()))
                                             .replaceAll("&", "§")
                             )
                     );

@@ -2,4 +2,4 @@ name: StaffChat
 main: dev.rodrigo.staffchat.bungee.StaffChatBungee
 description: "Staff Chat - By Rodrigo R."
 author: "Rodrigo R."
-version: "1.6"
+version: "1.7"

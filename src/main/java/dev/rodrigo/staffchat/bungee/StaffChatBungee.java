@@ -73,6 +73,19 @@ public class StaffChatBungee extends Plugin implements Listener {
         activePlayers.removeIf(uuid -> uuid.toString().equals(event.getPlayer().getUniqueId().toString()));
     }
 
+    public String formatString(String input) {
+        final String format = config.AsString("text_format");
+        if (input ==  null || format == null) return null;
+        if (format.equalsIgnoreCase("capitalize")) {
+            return input.substring(0, 1).toUpperCase() + input.substring(1);
+        } else if (format.equalsIgnoreCase("uppercase")) {
+            return input.toUpperCase();
+        } else if (format.equalsIgnoreCase("lowercase")) {
+            return input.toLowerCase();
+        }
+        return input;
+    }
+
     @EventHandler
     public void onChat(ChatEvent e) {
         if (config == null) return;
@@ -86,8 +99,9 @@ public class StaffChatBungee extends Plugin implements Listener {
                 pt.sendMessage(
                         TextComponent.fromLegacyText(
                                 config.AsString("on_message")
-                                        .replaceAll("(?i)\\{player}", p.getName())
-                                        .replaceAll("(?i)\\{message}", e.getMessage())
+                                        .replaceAll("(?i)\\{player}", formatString(p.getName()))
+                                        .replaceAll("(?i)\\{message}", formatString(e.getMessage()))
+                                        .replaceAll("(?i)\\{server}", formatString(p.getServer().getInfo().getName()))
                                         .replaceAll("&", "§")
                         )
                 );

@@ -1,5 +1,6 @@
 package dev.rodrigo.staffchat;
 
+import com.google.errorprone.annotations.FormatString;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 @Plugin(
     id = "staffchat",
     name = "StaffChat",
-    version = "1.6",
+    version = "1.7",
     description = "Staff Chat - By Rodrigo R.",
     authors = {"Rodrigo R."}
 )
@@ -85,19 +86,38 @@ public class StaffChat {
         proxyServer.getCommandManager().register("staffchat", new Velocity(this));
     }
 
+    public String formatString(String input) {
+        final String format = config.AsString("text_format");
+        if (input ==  null || format == null) return null;
+        if (format.equalsIgnoreCase("capitalize")) {
+            return input.substring(0, 1).toUpperCase() + input.substring(1);
+        } else if (format.equalsIgnoreCase("uppercase")) {
+            return input.toUpperCase();
+        } else if (format.equalsIgnoreCase("lowercase")) {
+            return input.toLowerCase();
+        }
+        return input;
+    }
+
     @Subscribe
     public void onPlayerChat(PlayerChatEvent e) {
         if (config == null) return;
         final Player p = e.getPlayer();
         if (!activePlayers.contains(p.getUniqueId())) return;
+        if (e.getPlayer().getCurrentServer().isEmpty()) {
+            logger.error("An invalid server was found for player: "+p.getUsername()+": The player is not connected to any server.");
+            e.setResult(PlayerChatEvent.ChatResult.denied());
+            return;
+        }
         e.setResult(PlayerChatEvent.ChatResult.denied());
         proxyServer.getScheduler().buildTask(this, () -> {
             for (Player pt : proxyServer.getAllPlayers().stream().filter(a -> a.hasPermission("staffchat.use")).collect(Collectors.toList())) {
                 pt.sendMessage(
                         Component.text(
                                 config.AsString("on_message")
-                                        .replaceAll("(?i)\\{player}", p.getUsername())
-                                        .replaceAll("(?i)\\{message}", e.getMessage())
+                                        .replaceAll("(?i)\\{player}", formatString(p.getUsername()))
+                                        .replaceAll("(?i)\\{message}", formatString(e.getMessage()))
+                                        .replaceAll("(?i)\\{server}", formatString(e.getPlayer().getCurrentServer().get().getServerInfo().getName()))
                                         .replaceAll("&", "§")
                         )
                 );
